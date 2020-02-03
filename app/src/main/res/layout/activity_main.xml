@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <EditText
+        android:hint="输入内容"
+        android:id="@+id/edt_qr_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+       />
+
+    <Button
+        android:id="@+id/btn_qr_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edt_qr_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:text="生成二维码" />
+
+    <Button
+        android:id="@+id/btn_qr_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_qr_create"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:text="打开相机扫一扫" />
+
+    <Button
+        android:id="@+id/btn_qr_photos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_qr_camera"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:text="打开相册中的二维码" />
+
+    <ImageView
+        android:id="@+id/iv_qr_picture"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/btn_qr_photos"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp" />
+
+
+</RelativeLayout>
