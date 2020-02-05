@@ -1,4 +1,4 @@
-package com.bw.forwardnetsample;
+package com.bw.forwardnetsample.view.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bw.forwardnetsample.R;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import butterknife.BindView;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         //Butterknife初始化的地方
         ButterKnife.bind(this);
 

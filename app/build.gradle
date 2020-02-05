@@ -53,4 +53,23 @@ dependencies {
     //Butterknife依赖之一
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    //Okhttp日志拦截器
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+
+    //RecyclerView依赖：
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+    //配置retrofit2.0     自带Ok和Gson，不需要另外依赖 Ok和 Gson
+    implementation 'com.squareup.retrofit2:retrofit:+'
+    //让retrofit支持Gson自动解析json
+    implementation 'com.squareup.retrofit2:converter-gson:+'
+    //配置支持Rxjava2
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:+'
+    //Rxjava的依赖
+    implementation 'io.reactivex.rxjava2:rxjava:+'
+    implementation 'io.reactivex.rxjava2:rxandroid:+'
+
+    //Glide依赖
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
 }
