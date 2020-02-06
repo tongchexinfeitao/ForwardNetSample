@@ -30,6 +30,7 @@ public class CartModel implements ICartContract.IModel {
 
                     }
 
+                    //onNext只代表 协议的状态码是 200 ，不代表返回的status 是 0000
                     @Override
                     public void onNext(CartBean cartBean) {
                         // onNext中不是真正的成功，只是协议成功，但不代表返回了购物车数据
@@ -43,9 +44,10 @@ public class CartModel implements ICartContract.IModel {
                         }
                     }
 
+                    //400 500 303
                     @Override
                     public void onError(Throwable e) {
-                        //http的状态码不是 200
+                        //http的协议状态码不是 200
                         iModelCallback.onCartFailure(e);
                     }
 

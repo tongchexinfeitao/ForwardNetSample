@@ -50,7 +50,7 @@ public class CartBean {
 
         //商家的名字
         private String categoryName;
-             //该商家下的所有的商品集合     ShoppingCartListBean 就是我们的商品的bean类
+        //该商家下的所有的商品集合          ShoppingCartListBean 就是我们的商品的bean类
         private List<ShoppingCartListBean> shoppingCartList;
 
         public String getCategoryName() {
@@ -85,7 +85,20 @@ public class CartBean {
             private String commodityName;
             private int count;
             private String pic;
-            private int price;
+            // TODO: 2020/2/6 该字段和对应的get set方法都必须换成double类型
+            private double price;
+            // TODO: 2020/2/6 给商品bean类新加一个选中状态 ，和对应的get set方法
+            private boolean isChecked;
+
+            //get方法
+            public boolean isChecked() {
+                return isChecked;
+            }
+
+            //set方法
+            public void setChecked(boolean checked) {
+                isChecked = checked;
+            }
 
             public int getCommodityId() {
                 return commodityId;
@@ -119,11 +132,11 @@ public class CartBean {
                 this.pic = pic;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
         }

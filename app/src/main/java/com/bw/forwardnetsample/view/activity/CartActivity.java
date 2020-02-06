@@ -12,6 +12,7 @@ import com.bw.forwardnetsample.base.BaseActivity;
 import com.bw.forwardnetsample.contract.ICartContract;
 import com.bw.forwardnetsample.model.bean.CartBean;
 import com.bw.forwardnetsample.presenter.CartPresenter;
+import com.bw.forwardnetsample.view.adapter.CartAdapter;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class CartActivity extends BaseActivity<CartPresenter> implements ICartCo
     @Override
     protected void initData() {
         // TODO: 2020/2/5 需要在这里通过 presenter 去发起请求
-        mPresenter.getCartData(27822, "158087042395127822");
+        mPresenter.getCartData(27822, "158095582260527822");
     }
 
     @Override
@@ -67,7 +68,18 @@ public class CartActivity extends BaseActivity<CartPresenter> implements ICartCo
     public void onCartSuccess(CartBean cartBean) {
         //商家的集合
         List<CartBean.ResultBean> resultBeanList = cartBean.getResult();
-        Toast.makeText(CartActivity.this, "请求购物车成功" , Toast.LENGTH_SHORT).show();
+        //构造一个适配器
+        CartAdapter cartAdapter = new CartAdapter(resultBeanList);
+        //设置适配器
+        mLv.setAdapter(cartAdapter);
+
+        //遍历商家集合
+        for (int i = 0; i < resultBeanList.size(); i++) {
+            //展开第几个商家，     展开第几个分组
+            mLv.expandGroup(i);
+        }
+
+        Toast.makeText(CartActivity.this, "请求购物车成功", Toast.LENGTH_SHORT).show();
     }
 
     @Override
