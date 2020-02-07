@@ -41,8 +41,8 @@
             android:text="¥0.0" />
     </LinearLayout>
 
-    <!--<com.bw.forwardsample.view.widget.MyAddSubView-->
-        <!--android:id="@+id/add_sub_view"-->
-        <!--android:layout_width="80dp"-->
-        <!--android:layout_height="wrap_content"></com.bw.forwardsample.view.widget.MyAddSubView>-->
+    <com.bw.forwardnetsample.view.widget.MyAddSubView
+        android:id="@+id/add_sub_view"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"></com.bw.forwardnetsample.view.widget.MyAddSubView>>
 </LinearLayout>

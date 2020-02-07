@@ -36,11 +36,12 @@ public class CartActivity extends BaseActivity<CartPresenter> implements ICartCo
     TextView mTvCartTotalPrice;
     @BindView(R.id.btn_cart_pay)
     Button mBtnCartPay;
+    private CartAdapter cartAdapter;
 
     @Override
     protected void initData() {
         // TODO: 2020/2/5 需要在这里通过 presenter 去发起请求
-        mPresenter.getCartData(27822, "158095582260527822");
+        mPresenter.getCartData(27822, "158103907808427822");
     }
 
     @Override
@@ -69,7 +70,17 @@ public class CartActivity extends BaseActivity<CartPresenter> implements ICartCo
         //商家的集合
         List<CartBean.ResultBean> resultBeanList = cartBean.getResult();
         //构造一个适配器
-        CartAdapter cartAdapter = new CartAdapter(resultBeanList);
+        cartAdapter = new CartAdapter(resultBeanList);
+        //
+        // TODO: 2020/2/7  给适配器设置监听   ，重新计算 全选状态、总价、总数量
+        cartAdapter.setOnCartChangeListener(new CartAdapter.OnCartChangeListener() {
+            @Override
+            public void onCartChange() {
+                mCbCartAllSelect.setChecked(cartAdapter.calculateIsAllChecked());
+                mTvCartTotalPrice.setText("合计:￥" + cartAdapter.calculateTotalPrice());
+                mBtnCartPay.setText("去结算(" + cartAdapter.calculateTotalNumber() + ")");
+            }
+        });
         //设置适配器
         mLv.setAdapter(cartAdapter);
 
@@ -88,7 +99,23 @@ public class CartActivity extends BaseActivity<CartPresenter> implements ICartCo
     }
 
 
+    //全选按钮的点击事件
     @OnClick(R.id.cb_cart_all_select)
     public void onViewClicked() {
+        //为了防止联网没成功，点击造成的空指针
+        if (cartAdapter == null) {
+            return;
+        }
+        //1、拿旧状态
+        boolean isAllChecked = cartAdapter.calculateIsAllChecked();
+        //2、置反得到新状态
+        isAllChecked = !isAllChecked;
+        //3、修改所有的商品状态为新状态
+        cartAdapter.changeAllCommodityStatus(isAllChecked);
+        //4、刷新适配器
+        cartAdapter.notifyDataSetChanged();
+        //5、重新计算 总价、总数量
+        mTvCartTotalPrice.setText("合计:￥" + cartAdapter.calculateTotalPrice());
+        mBtnCartPay.setText("去结算(" + cartAdapter.calculateTotalNumber() + ")");
     }
 }

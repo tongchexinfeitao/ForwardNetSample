@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bw.forwardnetsample.R;
 import com.bw.forwardnetsample.model.bean.CartBean;
+import com.bw.forwardnetsample.view.widget.MyAddSubView;
 
 import java.util.List;
 
@@ -126,10 +127,12 @@ public class CartAdapter extends BaseExpandableListAdapter {
                     //修改商品的状态为新状态
                     shoppingCartListBean.setChecked(oldIsChecked);
                 }
-                //4、刷新适配器
+                //4、刷新适配器      会重新走  getChildView，因为商品的状态已经被修改了，所以这个商品的cb状态就会跟着商家变
                 notifyDataSetChanged();
                 //5、通过接口通知外部重新计算状态、价格、数量
-
+                if (onCartChangeListener != null) {
+                    onCartChangeListener.onCartChange();
+                }
             }
         });
 
@@ -166,6 +169,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
         childViewHolder.mChildCb.setChecked(shoppingCartListBean.isChecked());
         // TODO: 2020/2/6 给商品的cb设置点击监听
         childViewHolder.mChildCb.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 // TODO: 2020/2/6 在点击事件中绝对不能使用checkbox
@@ -175,11 +179,32 @@ public class CartAdapter extends BaseExpandableListAdapter {
                 checked = !checked;
                 //3、修改数据
                 shoppingCartListBean.setChecked(checked);
-                //4、刷新适配器
+                //4、刷新适配器   本质是重新走了一遍 getGroupView，然后再getGroupView中会计算商家状态，所以商家状态也就跟着变了
                 notifyDataSetChanged();
                 //5、通过接口通知外部重新计算状态、价格、数量
+                if (onCartChangeListener != null) {
+                    onCartChangeListener.onCartChange();
+                }
             }
         });
+
+        //设置加减器的数量
+        childViewHolder.mAddSubView.setNum(shoppingCartListBean.getCount());
+        //设置加减器的监听
+        childViewHolder.mAddSubView.setOnNumChangeListener(new MyAddSubView.onNumChangeListener() {
+            @Override
+            public void onNumChange(int number) {
+                //1、修改商品的数量
+                shoppingCartListBean.setCount(number);
+                //2、刷新适配器
+                notifyDataSetChanged();
+                //3、通知外界  重新计算 总价、总数量
+                if(onCartChangeListener !=null) {
+                    onCartChangeListener.onCartChange();
+                }
+            }
+        });
+
         return convertView;
     }
 
@@ -187,6 +212,108 @@ public class CartAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
     }
+
+
+    /**
+     * 计算选中商品的总价
+     */
+    public double calculateTotalPrice() {
+        //总价
+        double totalPrice = 0;
+        //遍历所有的商家
+        for (int i = 0; i < resultBeanList.size(); i++) {
+            //第 i 个商家
+            CartBean.ResultBean resultBean = resultBeanList.get(i);
+            //拿到第 i 个商家下的商品集合
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = resultBean.getShoppingCartList();
+            //遍历第 i 个商家下的商品集合
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                //拿到第 j 个商品
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                //只有商品是选中状态，才计入总价
+                if (shoppingCartListBean.isChecked()) {
+                    //拿到当前商品的数量   累计到总数中
+                    totalPrice += shoppingCartListBean.getCount() * shoppingCartListBean.getPrice();
+                }
+
+            }
+        }
+        return totalPrice;
+    }
+
+    /**
+     * 计算选中商品的总数量
+     */
+    public int calculateTotalNumber() {
+        //总数量
+        int totalNumber = 0;
+        //遍历所有的商家
+        for (int i = 0; i < resultBeanList.size(); i++) {
+            //第 i 个商家
+            CartBean.ResultBean resultBean = resultBeanList.get(i);
+            //拿到第 i 个商家下的商品集合
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = resultBean.getShoppingCartList();
+            //遍历第 i 个商家下的商品集合
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                //拿到第 j 个商品
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                //只有商品是选中状态，才计入总数
+                if (shoppingCartListBean.isChecked()) {
+                    //拿到当前商品的数量   累计到总数中
+                    totalNumber += shoppingCartListBean.getCount();
+                }
+
+            }
+        }
+        return totalNumber;
+    }
+
+    /**
+     * 计算是否是全选状态
+     */
+    public boolean calculateIsAllChecked() {
+        //默认全选状态是true， 只要有一个商品不是true，全选按钮状态就是false
+        boolean isAllChecked = true;
+        //遍历所有的商家
+        for (int i = 0; i < resultBeanList.size(); i++) {
+            //第 i 个商家
+            CartBean.ResultBean resultBean = resultBeanList.get(i);
+            //拿到第 i 个商家下的商品集合
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = resultBean.getShoppingCartList();
+            //遍历第 i 个商家下的商品集合
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                //拿到第 j 个商品
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                //判断商品状态，只要是false，那么全选状态就是false，终止循环
+                if (shoppingCartListBean.isChecked() == false) {
+                    isAllChecked = false;
+                    break;   //终止循环
+                }
+            }
+        }
+        return isAllChecked;
+    }
+
+    /**
+     * 修改所有商品的状态
+     */
+    public void changeAllCommodityStatus(boolean isAllChecked) {
+        //遍历所有的商家
+        for (int i = 0; i < resultBeanList.size(); i++) {
+            //第 i 个商家
+            CartBean.ResultBean resultBean = resultBeanList.get(i);
+            //拿到第 i 个商家下的商品集合
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = resultBean.getShoppingCartList();
+            //遍历第 i 个商家下的商品集合
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                //拿到第 j 个商品
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                //修改他的状态
+                shoppingCartListBean.setChecked(isAllChecked);
+            }
+        }
+    }
+
 
     /**
      * 商家的viewholder
@@ -211,9 +338,26 @@ public class CartAdapter extends BaseExpandableListAdapter {
         TextView mProductTitleNameTv;
         @BindView(R.id.product_price_tv)
         TextView mProductPriceTv;
+        @BindView(R.id.add_sub_view)
+        MyAddSubView mAddSubView;
 
         ChildViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
+
+    OnCartChangeListener onCartChangeListener;
+
+    public void setOnCartChangeListener(OnCartChangeListener onCartChangeListener) {
+        this.onCartChangeListener = onCartChangeListener;
+    }
+
+    /**
+     * 当购物车中商品或者商家，选中状态或者数量发生变化的时候，通知外部
+     */
+    public interface OnCartChangeListener {
+        void onCartChange();
+    }
+
 }
