@@ -2,9 +2,14 @@ package com.bw.forwardnetsample.util;
 
 import com.bw.forwardnetsample.Api;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -46,9 +51,9 @@ public class NetUtil {
                 .readTimeout(8, TimeUnit.SECONDS)
                 .writeTimeout(8, TimeUnit.SECONDS)
                 .connectTimeout(8, TimeUnit.SECONDS)
+                //当我们请求和服务器响应的时候，需要通过拦截器，所以可以在拦截器中可以对请求和响应做一些处理
                 .addInterceptor(httpLoggingInterceptor)
                 .build();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
                 //接口公共的url部分

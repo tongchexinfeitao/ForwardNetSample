@@ -18,6 +18,28 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 适配器中有购物车中所有商家的数据
+ * <p>
+ * 联动的总体思路
+ * 不管点击哪种checkbox，只修改数据，不能操作视图
+ * 1、拿到旧状态
+ * 2、置反得到新状态
+ * 3、修改商品 bean 类的状态为新状态   （点商品只变自己、点商家变自己旗下的商品、点全选变所有商品）
+ * 4、刷新适配器
+ * 5、通知外界重新计算 价格、数量、全选状态
+ *
+ * <p>
+ * <p>
+ * 适配器中写了四个方法   为activity中的底部状态栏服务
+ * 1、计算全选状态
+ * 2、计算总价
+ * 3、计算总数量
+ * 4、点击全选的时候，改变所有商品状态
+ *
+ *
+ *
+ */
 public class CartAdapter extends BaseExpandableListAdapter {
 
 
@@ -38,7 +60,9 @@ public class CartAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * 返回第groupPosition个商家的商品数量
+     * 返回第 groupPosition 个商家的商品数量
+     * <p>
+     * groupPosition 指定的是第几个商家
      */
     @Override
     public int getChildrenCount(int groupPosition) {
@@ -142,6 +166,8 @@ public class CartAdapter extends BaseExpandableListAdapter {
 
     /**
      * 商品布局     checkbox和 商品名字textview 、商品价格textview、商品图片Imageview 、加减器
+     * <p>
+     * 把getChildView看成是实现   商品列表的适配器的getView方法
      */
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
@@ -199,7 +225,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
                 //2、刷新适配器
                 notifyDataSetChanged();
                 //3、通知外界  重新计算 总价、总数量
-                if(onCartChangeListener !=null) {
+                if (onCartChangeListener != null) {
                     onCartChangeListener.onCartChange();
                 }
             }
@@ -230,6 +256,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
             for (int j = 0; j < shoppingCartList.size(); j++) {
                 //拿到第 j 个商品
                 CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                // TODO: 2020/2/8 只要商品是选中的，那么 商品单价 * 商品数量，就要累积给总价
                 //只有商品是选中状态，才计入总价
                 if (shoppingCartListBean.isChecked()) {
                     //拿到当前商品的数量   累计到总数中
@@ -257,6 +284,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
             for (int j = 0; j < shoppingCartList.size(); j++) {
                 //拿到第 j 个商品
                 CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                // TODO: 2020/2/8 核心逻辑，只要商品是选中的，那么他的数量就要累积给总数
                 //只有商品是选中状态，才计入总数
                 if (shoppingCartListBean.isChecked()) {
                     //拿到当前商品的数量   累计到总数中
@@ -284,6 +312,7 @@ public class CartAdapter extends BaseExpandableListAdapter {
             for (int j = 0; j < shoppingCartList.size(); j++) {
                 //拿到第 j 个商品
                 CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                // TODO: 2020/2/8 核心逻辑， 遍历所有商品，只要有一个是false，全选状态为false
                 //判断商品状态，只要是false，那么全选状态就是false，终止循环
                 if (shoppingCartListBean.isChecked() == false) {
                     isAllChecked = false;

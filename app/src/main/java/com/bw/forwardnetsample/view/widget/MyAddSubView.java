@@ -15,6 +15,11 @@ import butterknife.OnClick;
 
 /**
  * 加减器 组合控件
+ *
+ * 核心的两个地方
+ * 1、setNum方法用于设置加减器数量               别人告诉我数量
+ * 2、加减器被点击之后，通过接口通知外界自身数量的变化           我告诉别人数量
+ *
  */
 public class MyAddSubView extends LinearLayout {
     @BindView(R.id.tv_sub)

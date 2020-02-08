@@ -41,7 +41,7 @@ public class CartActivity extends BaseActivity<CartPresenter> implements ICartCo
     @Override
     protected void initData() {
         // TODO: 2020/2/5 需要在这里通过 presenter 去发起请求
-        mPresenter.getCartData(27822, "158103907808427822");
+        mPresenter.getCartData(27822, "158112686385027822");
     }
 
     @Override
