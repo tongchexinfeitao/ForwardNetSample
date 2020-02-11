@@ -29,7 +29,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         setContentView(layoutId());
         //提供presenter
         mPresenter = providePresenter();
-        //给p层绑定接口
+        //给p层绑定接口     必须判空，为了防止某些子类不需要 p，提供的 p 为 null
         if (mPresenter != null) {
             mPresenter.attach(this);
         }
