@@ -88,6 +88,7 @@ public class OrderFormFragment extends BaseFragment<OrderFormPresenter> implemen
     @Override
     public void onOrderFormFailure(Throwable throwable) {
         Toast.makeText(getActivity(), "请求订单失败" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+
     }
 
 }
