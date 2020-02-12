@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.RadioGroup;
 
 import com.bw.forwardnetsample.R;
 import com.bw.forwardnetsample.base.BaseActivity;
@@ -26,6 +28,8 @@ public class OrderFormActiivty extends BaseActivity {
     ViewPager mVp;
 
     List<Fragment> fragmentList = new ArrayList<>();
+    @BindView(R.id.rg)
+    RadioGroup mRg;
 
     @Override
     protected void initData() {
@@ -58,7 +62,46 @@ public class OrderFormActiivty extends BaseActivity {
 
     @Override
     protected void initView() {
+        mRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rbtn_all:
+                        mVp.setCurrentItem(0);
+                        break;
+                    case R.id.rbtn_wait_pay:
+                        mVp.setCurrentItem(1);
+                        break;
+                    case R.id.rbtn_wait_receive:
+                        mVp.setCurrentItem(2);
+                        break;
+                    case R.id.rbtn_wait_evaluate:
+                        mVp.setCurrentItem(3);
+                        break;
+                    case R.id.rbtn_complete:
+                        mVp.setCurrentItem(9);
+                        break;
+                }
 
+            }
+        });
+
+        mVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                mRg.check(mRg.getChildAt(i).getId());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
     @Override

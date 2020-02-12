@@ -6,9 +6,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbtn_all"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/select_order_rbtn"
+            android:gravity="center"
+            android:text="全部订单" />
+
+        <RadioButton
+            android:id="@+id/rbtn_wait_pay"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/select_order_rbtn"
+            android:gravity="center"
+            android:text="待支付" />
+
+        <RadioButton
+            android:id="@+id/rbtn_wait_receive"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/select_order_rbtn"
+            android:gravity="center"
+            android:text="待收货" />
+
+        <RadioButton
+            android:id="@+id/rbtn_wait_evaluate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/select_order_rbtn"
+            android:gravity="center"
+            android:text="待评价" />
+
+        <RadioButton
+            android:id="@+id/rbtn_complete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/select_order_rbtn"
+            android:gravity="center"
+            android:text="已完成" />
+    </RadioGroup>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="9"></android.support.v4.view.ViewPager>
 </LinearLayout>

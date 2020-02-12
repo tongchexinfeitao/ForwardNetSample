@@ -16,7 +16,7 @@ public interface Api {
     @GET("small/order/verify/v1/findShoppingCart")
     Observable<CartBean> getCartData(@Header("userId") int userId, @Header("sessionId") String sessionId);
 
-    //查询订单
+    //查询订单    0 1 2 3 9
     @GET("small/order/verify/v1/findOrderListByStatus")
     Observable<OrderFormBean> getOrderFormData(@Header("userId") int userId,
                                                @Header("sessionId") String sessionId,

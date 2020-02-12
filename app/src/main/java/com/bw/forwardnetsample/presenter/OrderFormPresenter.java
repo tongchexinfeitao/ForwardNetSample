@@ -19,6 +19,7 @@ public class OrderFormPresenter extends BasePresenter<IOrderFormContract.IView> 
         orderFormModel.getOrderFormData(userId, sessionId, status, page, count, new IOrderFormContract.IModel.IModelCallback() {
             @Override
             public void onOrderFormSuccess(OrderFormBean orderFormBean) {
+                //view  来自于父类  BasePresenter
                 view.onOrderFormSuccess(orderFormBean);
             }
 

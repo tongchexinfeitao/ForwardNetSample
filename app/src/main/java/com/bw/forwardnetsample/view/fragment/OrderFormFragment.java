@@ -2,6 +2,7 @@ package com.bw.forwardnetsample.view.fragment;
 
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,9 @@ import com.bw.forwardnetsample.base.BaseFragment;
 import com.bw.forwardnetsample.contract.IOrderFormContract;
 import com.bw.forwardnetsample.model.bean.OrderFormBean;
 import com.bw.forwardnetsample.presenter.OrderFormPresenter;
+import com.bw.forwardnetsample.view.adapter.OrderFormAdapter;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +29,7 @@ import butterknife.Unbinder;
  */
 public class OrderFormFragment extends BaseFragment<OrderFormPresenter> implements IOrderFormContract.IView {
 
+    //是一个订单列表，  item布局就是一个订单的布局
     @BindView(R.id.recycler)
     RecyclerView mRecycler;
     Unbinder unbinder;
@@ -52,7 +57,7 @@ public class OrderFormFragment extends BaseFragment<OrderFormPresenter> implemen
         if (bundle != null) {
             status = bundle.getInt("status");
         }
-        mPresenter.getOrderFormData(27822, "158140097740427822", status, 1, 10);
+        mPresenter.getOrderFormData(27822, "158148992577727822", status, 1, 10);
     }
 
 
@@ -69,7 +74,15 @@ public class OrderFormFragment extends BaseFragment<OrderFormPresenter> implemen
 
     @Override
     public void onOrderFormSuccess(OrderFormBean orderFormBean) {
-        Toast.makeText(getActivity(), "请求订单成功", Toast.LENGTH_SHORT).show();
+        //1、拿到订单集合
+        List<OrderFormBean.OrderListBean> orderList = orderFormBean.getOrderList();
+        //2、设置布局管理器
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecycler.setLayoutManager(linearLayoutManager);
+        //3、设置适配器
+        OrderFormAdapter orderFormAdapter = new OrderFormAdapter(orderList);
+        mRecycler.setAdapter(orderFormAdapter);
     }
 
     @Override
